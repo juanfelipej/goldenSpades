@@ -1,0 +1,153 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+}
+body {
+    background-image: url('../recursos/jpg/fondoMovil.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+}
+h1{
+    font-size: 50px;
+}
+h2{
+    font-size: 17px;
+}
+.promocional{
+    font-size: 18px;
+}
+p{
+    font-size: 21px;
+}
+p,h1,h2{
+    color: white;
+}
+.josefin-sans-bold {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: bolder;
+    font-style: normal;
+}
+.josefin-sans-ligth {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+.josefin-sans-normal {
+    font-family: "Josefin Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+}
+.flex-colum{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+.oportunidad{
+    letter-spacing: 1px;
+    margin: 28px;
+}
+.form-control-custom {
+    width: 170px;
+    height: 15px;
+    background-color: #FAFAFC;
+    border-radius: 9px;
+    margin: 6px;
+    padding: 13px;
+    border: none;
+}
+.form-control-custom::placeholder{
+    font-family: "Josefin Sans", sans-serif;
+    font-size: 19px;
+    text-align: center;
+    color: black;
+    font-weight: 600;
+}
+#logoMP{
+    width: 179px;
+    margin: 30px;
+}
+#tyc{
+    margin-left: 10px;
+    color: white;
+    font-size: 13px;
+    text-decoration: underline;
+}
+button {
+    background: linear-gradient(45deg, #A37A1D, #D3A74D, #FFEB94, #E6BD69, #FFD77C, #B58E3D);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    font-size: 19px;
+    cursor: pointer;
+    width: 195px;
+    height: 42px;
+    border-radius: 9px;
+    color: black;
+    margin: 20px;
+
+}
+.logoColjuegos{
+    background-color: white;
+    padding: 6px;
+    border-radius: 9px 9px 0 0;
+}
+.logoGolden{
+    width: 50px;
+}
+.cont-tyc{
+    margin-top: 10px;
+}
+.txt-confirmacion{
+    font-size: 15px;
+}
+#logoWonder{
+    width: 100px;
+}
+  
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo oscuro semi-transparente */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+  }
+   /* Estilos para el círculo de carga */
+   #loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1001; /* Asegura que esté por encima del div de superposición */
+  }
+  
+  .spinner {
+    border: 8px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #ffeb94;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 3s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
