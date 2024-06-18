@@ -63,6 +63,10 @@ p,h1,h2{
     margin: 28px;
 }
 .form-control-custom {
+    font-size: 19px;
+    text-align: center;
+    color: black;
+    font-weight: 600;
     width: 170px;
     height: 15px;
     background-color: #FAFAFC;
@@ -70,6 +74,7 @@ p,h1,h2{
     margin: 6px;
     padding: 13px;
     border: none;
+    font-family: "Josefin Sans", sans-serif;
 }
 .form-control-custom::placeholder{
     font-family: "Josefin Sans", sans-serif;
@@ -80,7 +85,7 @@ p,h1,h2{
 }
 #logoMP{
     width: 179px;
-    margin: 30px;
+    margin: 13px;
 }
 #tyc{
     margin-left: 10px;
@@ -151,3 +156,60 @@ button {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+ /* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  .modal-content {
+    background-color: #D9D9D9;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Adjust as needed */
+    max-width: 600px; /* Max width */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Light shadow */
+    text-align: center; /* Center text */
+  }
+  
+  .modal-img {
+    width: 100px; /* Adjust size as needed */
+    height: auto;
+    display: block;
+    margin: 0 auto 20px auto; /* Center image with margin below */
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .modal-content>p{
+    color: black;
+    font-family: "Josefin Sans", sans-serif;
+  }
+  .validation-messages {
+    color: #ffeb94;
+    font-family: "Josefin Sans", sans-serif;
+    margin: 16px 0 0 0px;
+    font-weight: bolder;
+    font-size: 14px;
+    padding: 0px  46px;
+}

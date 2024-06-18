@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="css/estilos.css">
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
+        rel="stylesheet">
 </head>
 
 <body class="flex-colum">
@@ -16,6 +17,7 @@
     <div id="loading-indicator" style="display: none;">
         <div class="spinner"></div>
     </div>
+    <div id="error-message" style="display:none; color: red;"></div>
     <main class="flex-colum">
         <img class="logoGolden" src="recursos/gif/goldenspades.gif" alt="">
         <img id="logoMP" src="recursos/png/casinoMarcoPolo.png" alt="Logo casino marco polo">
@@ -29,46 +31,126 @@
             <input class="form-control-custom" type="text" name="nombre" placeholder="Nombre y apellido" required>
             <input class="form-control-custom" type="number" name="cedula" placeholder="Cédula" required>
             <input class="form-control-custom" type="tel" name="celular" placeholder="Celular" required>
+            <input class="form-control-custom" type="number" name="codigo" placeholder="Código" required>
             <div class="flex-row cont-tyc">
                 <input type="checkbox" name="autorizacion" required>
-                <label class="josefin-sans-normal" id="tyc" for="autorizacion">Autorizo el uso de mis datos para entrega de premios.</label>
+                <label class="josefin-sans-normal" id="tyc" for="autorizacion">Autorizo el uso de mis datos para entrega
+                    de premios.</label>
             </div>
+            <div id="validation-messages" class="validation-messages josefin-sans-normal"></div>
+
             <button type="submit" class="josefin-sans-bold">Enviar</button>
         </form>
         <div class="logoColjuegos">
             <img src="recursos/png/coljuegos.png" alt="Logo autoriza coljuegos">
         </div>
     </main>
+    <!-- Modal Structure -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="recursos/png/advertencia.png" alt="Error Image" class="modal-img">
+            <p>Lo sentimos, este código ya ha sido redimido.</p>
+        </div>
+    </div>
+    
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbxNzG26k3MUtNPVCpioXIiU1jOdgQKvK3Z67cu7A_WnGgE4Mvzpze7DhBxW4nnu9_7WLg/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZ-JdKs7R25OvNk100sTvkvJfegfb_Uel_OTq6rP82RjeFIZwLPh8MJ1CJefRJQgtVZQ/exec';
         const form = document.forms['contact-form'];
         const overlay = document.getElementById('overlay');
+        const nombreInput = form['nombre'];
+        const cedulaInput = form['cedula'];
+        const celularInput = form['celular'];
+        const codigoInput = form['codigo'];
         const loadingIndicator = document.getElementById('loading-indicator');
-
+        const errorMessage = document.getElementById('error-message');
+        const validationMessages = document.getElementById('validation-messages');
+        const modal = document.getElementById("errorModal");
+        const span = document.getElementsByClassName("close")[0];
+    
         form.addEventListener('submit', e => {
             e.preventDefault();
-
+    
+            let valid = true;
+            let messages = [];
+    
+            // Validar nombre
+            const nombreRegex = /^[a-zA-Z\s]+$/;
+            if (!nombreRegex.test(nombreInput.value)) {
+                valid = false;
+                messages.push('El nombre solo debe contener letras.');
+            }
+    
+            // Validar cédula
+            const cedulaRegex = /^\d{6,}$/;
+            if (!cedulaRegex.test(cedulaInput.value)) {
+                valid = false;
+                messages.push('La cédula debe contener solo números y tener más de 6 dígitos.');
+            }
+    
+            // Validar celular
+            const celularRegex = /^\d{10}$/;
+            if (!celularRegex.test(celularInput.value)) {
+                valid = false;
+                messages.push('El celular debe contener 10 dígitos.');
+            }
+    
+            // Validar código
+            const codigoRegex = /^\d+$/;
+            if (!codigoRegex.test(codigoInput.value)) {
+                valid = false;
+                messages.push('El código debe contener solo números.');
+            }
+    
+            if (!valid) {
+                validationMessages.innerHTML = messages.join('<br>');
+                validationMessages.style.display = 'block';
+                return;
+            } else {
+                validationMessages.style.display = 'none';
+            }
+    
             const formData = new FormData(form);
-
+    
             overlay.style.display = 'block';
             loadingIndicator.style.display = 'block';
-
+    
             fetch(scriptURL, { method: 'POST', body: formData })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = 'https://easyguess.com/confirmacion.html';
+                .then(response => response.json())
+                .then(data => {
+                    if (data.result === 'success') {
+                        window.location.href = 'confirmacion.html';
+                    } else if (data.result === 'error' && data.error === 'Codigo already exists') {
+                        modal.style.display = 'block';
                     } else {
-                        throw new Error('Network response was not ok.');
+                        throw new Error(data.error || 'Network response was not ok.');
                     }
                 })
-                .catch(error => console.error('Error!', error.message))
+                .catch(error => {
+                    console.error('Error!', error.message);
+                    errorMessage.textContent = 'Hubo un error al procesar su solicitud. Por favor, inténtelo de nuevo.';
+                    errorMessage.style.display = 'block';
+                })
                 .finally(() => {
                     overlay.style.display = 'none';
                     loadingIndicator.style.display = 'none';
                 });
         });
+    
+        // Close the modal when the user clicks on <span> (x)
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+    
+        // Close the modal when the user clicks anywhere outside of the modal
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
     </script>
+    
 </body>
 
 </html>
