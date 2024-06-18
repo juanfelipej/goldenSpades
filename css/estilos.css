@@ -14,16 +14,16 @@ body {
     width: 100vw;
 }
 h1{
-    font-size: 50px;
+    font-size: 45px;
 }
 h2{
-    font-size: 17px;
+    font-size: 15px;
 }
 .promocional{
     font-size: 18px;
 }
 p{
-    font-size: 21px;
+    font-size: 17px;
 }
 p,h1,h2{
     color: white;
@@ -60,7 +60,7 @@ p,h1,h2{
 }
 .oportunidad{
     letter-spacing: 1px;
-    margin: 28px;
+    margin: 17px;
 }
 .form-control-custom {
     font-size: 19px;
@@ -68,7 +68,7 @@ p,h1,h2{
     color: black;
     font-weight: 600;
     width: 170px;
-    height: 15px;
+    height: 11px;
     background-color: #FAFAFC;
     border-radius: 9px;
     margin: 6px;
@@ -104,8 +104,7 @@ button {
     height: 42px;
     border-radius: 9px;
     color: black;
-    margin: 20px;
-
+    margin: 18px;
 }
 .logoColjuegos{
     background-color: white;
@@ -189,10 +188,10 @@ button {
   }
   
   .close {
-    color: #aaa;
+    color: #000;
     float: right;
     font-size: 28px;
-    font-weight: bold;
+    font-weight: bolder;
   }
   
   .close:hover,
@@ -213,3 +212,29 @@ button {
     font-size: 14px;
     padding: 0px  46px;
 }
+.input-container {
+    position: relative;
+    margin-bottom: 8px;
+}
+
+.field-label {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    color: #888;
+    font-size: 12px;
+    pointer-events: none;
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    transform: translateY(0);
+    color: white;
+    text-align: center;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+.form-control-custom:focus + .field-label,
+.form-control-custom:not(:placeholder-shown) + .field-label {
+    opacity: 1;
+    transform: translateY(-20px);
+}
+

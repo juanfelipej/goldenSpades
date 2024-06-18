@@ -28,19 +28,30 @@
         <p class="josefin-sans-ligth oportunidad">No se pierda esta oportunidad <br>única de ser parte de lo mejor.</p>
 
         <form name="contact-form" class="flex-colum">
-            <input class="form-control-custom" type="text" name="nombre" placeholder="Nombre y apellido" required>
-            <input class="form-control-custom" type="number" name="cedula" placeholder="Cédula" required>
-            <input class="form-control-custom" type="tel" name="celular" placeholder="Celular" required>
-            <input class="form-control-custom" type="number" name="codigo" placeholder="Código" required>
+            <div class="input-container">
+                <input class="form-control-custom" type="text" name="nombre" placeholder="Nombre y apellido" required>
+                <span class="field-label">Nombre y apellido</span>
+            </div>
+            <div class="input-container">
+                <input class="form-control-custom" type="number" name="cedula" placeholder="Cédula" required>
+                <span class="field-label">Cédula</span>
+            </div>
+            <div class="input-container">
+                <input class="form-control-custom" type="tel" name="celular" placeholder="Celular" required>
+                <span class="field-label">Celular</span>
+            </div>
+            <div class="input-container">
+                <input class="form-control-custom" type="number" name="codigo" placeholder="Código" required>
+                <span class="field-label">Código</span>
+            </div>
             <div class="flex-row cont-tyc">
                 <input type="checkbox" name="autorizacion" required>
-                <label class="josefin-sans-normal" id="tyc" for="autorizacion">Autorizo el uso de mis datos para entrega
-                    de premios.</label>
+                <label class="josefin-sans-normal" id="tyc" for="autorizacion">Autorizo el uso de mis datos para entrega de premios.</label>
             </div>
             <div id="validation-messages" class="validation-messages josefin-sans-normal"></div>
-
             <button type="submit" class="josefin-sans-bold">Enviar</button>
         </form>
+        
         <div class="logoColjuegos">
             <img src="recursos/png/coljuegos.png" alt="Logo autoriza coljuegos">
         </div>
@@ -150,7 +161,7 @@
             }
         }
     </script>
-    
+    <script src="javascript/mostrarinputs.js"></script>
 </body>
 
 </html>
