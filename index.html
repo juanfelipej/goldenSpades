@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="css/estilos.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="icon" href="recursos/png/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap"
         rel="stylesheet">
 </head>
@@ -23,7 +25,7 @@
         <img id="logoMP" src="recursos/png/casinoMarcoPolo.png" alt="Logo casino marco polo">
         <h1 class="josefin-sans-bold">¡Felicidades!</h1>
         <h2 class="josefin-sans-normal">Está a solo un paso de reclamar sus</h2>
-        <img src="./recursos/png/450000.png" alt="logo dorado cuatrocientos cincuentamil pesos">
+        <img class="img_dinero" src="./recursos/png/450000.png" alt="logo dorado cuatrocientos cincuentamil pesos">
         <p class="promocional josefin-sans-ligth">En dinero promocional</p>
         <p class="josefin-sans-ligth oportunidad">No se pierda esta oportunidad <br>única de ser parte de lo mejor.</p>
 
@@ -46,7 +48,7 @@
             </div>
             <div class="flex-row cont-tyc">
                 <input type="checkbox" name="autorizacion" required>
-                <label class="josefin-sans-normal" id="tyc" for="autorizacion">Autorizo el uso de mis datos para entrega de premios.</label>
+                <a class="josefin-sans-normal" href="politicaDatosPerosonales.html" id="tyc" >Autorizo el uso de mis datos para entrega de premios.</a>
             </div>
             <div id="validation-messages" class="validation-messages josefin-sans-normal"></div>
             <button type="submit" class="josefin-sans-bold">Enviar</button>
