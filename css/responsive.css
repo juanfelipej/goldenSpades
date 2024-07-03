@@ -1,5 +1,15 @@
 /* Estilos para smartphones en modo vertical */
 @media only screen and (max-width: 375px) {
+    body > main > img:nth-child(4){
+        margin: 5px;
+        width: 65%;  
+    }
+    #logoWonder{
+        margin: 0;
+    }
+    body > main > img.logoGolden{
+        margin: 0;
+    }
     #logoMP {
         width: 160px;
         margin: 7px;
@@ -35,13 +45,8 @@
         font-size: 11px;
     }
 
-    .oportunidad {
-        margin: 7px;
-    }
+   
 
-    body {
-        padding: 9px 0px;
-    }
 
     .logoColjuegos {
         margin: 12px;
@@ -52,6 +57,11 @@
     }
     .logoGolden {
         width: 38px;
+    }
+    iframe {
+        width: 13rem;
+        height: 13rem;
+        border-radius: 15px;
     }
 }
 

@@ -25,7 +25,7 @@
         <img id="logoMP" src="recursos/png/casinoMarcoPolo.png" alt="Logo casino marco polo">
         <h1 class="josefin-sans-bold">¡Felicidades!</h1>
         <h2 class="josefin-sans-normal">Está a solo un paso de reclamar sus</h2>
-        <img class="img_dinero" src="./recursos/png/450000.png" alt="logo dorado cuatrocientos cincuentamil pesos">
+        <img class="img_dinero" src="./recursos/png/300000.png" alt="logo dorado cuatrocientos cincuentamil pesos">
         <p class="promocional josefin-sans-ligth">En dinero promocional</p>
         <p class="josefin-sans-ligth oportunidad">No se pierda esta oportunidad <br>única de ser parte de lo mejor.</p>
 
@@ -42,10 +42,7 @@
                 <input class="form-control-custom" type="tel" name="celular" placeholder="Celular" required>
                 <span class="field-label">Celular</span>
             </div>
-            <div class="input-container">
-                <input class="form-control-custom" type="number" name="codigo" placeholder="Código" required>
-                <span class="field-label">Código</span>
-            </div>
+            
             <div class="flex-row cont-tyc">
                 <input type="checkbox" name="autorizacion" required>
                 <a class="josefin-sans-normal" href="politicaDatosPerosonales.html" id="tyc" >Autorizo el uso de mis datos para entrega de premios.</a>
@@ -66,56 +63,82 @@
             <p>Lo sentimos, este código ya ha sido redimido.</p>
         </div>
     </div>
+    <div id="errorModalCd" class="modal">
+        <div class="modal-contentCd">
+            <span class="close">&times;</span>
+            <img src="recursos/png/advertencia.png" alt="Error Image" class="modal-img">
+            <p>Lo sentimos, esta cédula ya ha sido inscrita.</p>
+        </div>
+    </div>
+    <div id="errorModalCd" class="modal">
+        <div class="modal-contentCd">
+            <span id="contentCd" class="close">&times;</span>
+            <img src="recursos/png/advertencia.png" alt="Error Image" class="modal-img">
+            <p>Lo sentimos, esta cédula ya ha sido inscrita.</p>
+        </div>
+    </div>
+    <div id="errorModalIN" class="modal">
+        <div class="modal-contentIN">
+            <span id="contentIN" class="close">&times;</span>
+            <img src="recursos/png/advertencia.png" alt="Error Image" class="modal-img">
+            <p>Lo sentimos, este código no es válido.</p>
+        </div>
+    </div>
+    
     
 
     <script>
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbyZ-JdKs7R25OvNk100sTvkvJfegfb_Uel_OTq6rP82RjeFIZwLPh8MJ1CJefRJQgtVZQ/exec';
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbwet6XnEWxHjduToV07_ZnU53VzGkFWnYeskeKsTdsA4gne8t8NxwS3r_2X4WFoegEnFQ/exec';
         const form = document.forms['contact-form'];
         const overlay = document.getElementById('overlay');
         const nombreInput = form['nombre'];
         const cedulaInput = form['cedula'];
         const celularInput = form['celular'];
-        const codigoInput = form['codigo'];
         const loadingIndicator = document.getElementById('loading-indicator');
         const errorMessage = document.getElementById('error-message');
         const validationMessages = document.getElementById('validation-messages');
         const modal = document.getElementById("errorModal");
         const span = document.getElementsByClassName("close")[0];
-    
+        const spanCd = document.getElementById("contentCd");
+        const spanIN = document.getElementById("contentIN");
+        const modalContent = document.getElementsByClassName("modal-content")[0];
+  
+        const modalContentCd = document.getElementsByClassName("modal-contentCd")[0];
+        const errorModalCd = document.getElementById("errorModalCd");
+        const errorModalIN = document.getElementById("errorModalIN");
+        const modalContentIN = document.getElementsByClassName("modal-contentIN")[0];
+
+        // Obtener el código dinámico de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const codigo = "IXQBL";
+
         form.addEventListener('submit', e => {
             e.preventDefault();
-    
+
             let valid = true;
             let messages = [];
-    
+
             // Validar nombre
             const nombreRegex = /^[a-zA-Z\s]+$/;
             if (!nombreRegex.test(nombreInput.value)) {
                 valid = false;
                 messages.push('El nombre solo debe contener letras.');
             }
-    
+
             // Validar cédula
             const cedulaRegex = /^\d{6,}$/;
             if (!cedulaRegex.test(cedulaInput.value)) {
                 valid = false;
                 messages.push('La cédula debe contener solo números y tener más de 6 dígitos.');
             }
-    
+
             // Validar celular
             const celularRegex = /^\d{10}$/;
             if (!celularRegex.test(celularInput.value)) {
                 valid = false;
                 messages.push('El celular debe contener 10 dígitos.');
             }
-    
-            // Validar código
-            const codigoRegex = /^\d+$/;
-            if (!codigoRegex.test(codigoInput.value)) {
-                valid = false;
-                messages.push('El código debe contener solo números.');
-            }
-    
+
             if (!valid) {
                 validationMessages.innerHTML = messages.join('<br>');
                 validationMessages.style.display = 'block';
@@ -123,19 +146,33 @@
             } else {
                 validationMessages.style.display = 'none';
             }
-    
+
             const formData = new FormData(form);
-    
+
+            if (codigo) {
+                formData.append('codigo', codigo);
+            } else {
+                console.error('No se encontró el parámetro "codigo" en la URL.');
+                return; // detener el envío si no se encuentra el código en la URL
+            }
+            formData.append('entregado', 1);
             overlay.style.display = 'block';
             loadingIndicator.style.display = 'block';
-    
+
             fetch(scriptURL, { method: 'POST', body: formData })
                 .then(response => response.json())
                 .then(data => {
                     if (data.result === 'success') {
                         window.location.href = 'confirmacion.html';
-                    } else if (data.result === 'error' && data.error === 'Codigo already exists') {
+                    } else if (data.result === 'error' && data.error === 'Codigo ya existe') {
+                        modalContent.style.display = 'block';
                         modal.style.display = 'block';
+                    } else if (data.result === 'error' && data.error === 'Cedula ya existe') {
+                        errorModalCd.style.display = 'block';
+                        modalContentCd.style.display = 'block';
+                    }  else if (data.result === 'error' && data.error === 'Codigo no es válido') {
+                        modalContentIN.style.display = 'block';
+                        errorModalIN.style.display = 'block';
                     } else {
                         throw new Error(data.error || 'Network response was not ok.');
                     }
@@ -150,12 +187,22 @@
                     loadingIndicator.style.display = 'none';
                 });
         });
-    
+
         // Close the modal when the user clicks on <span> (x)
         span.onclick = function () {
             modal.style.display = "none";
         }
-    
+        spanCd.onclick = function () {
+            
+            errorModalCd.style.display = 'none';
+                        modalContentCd.style.display = 'none';
+        }
+        spanIN.onclick = function () {
+         
+            modalContentIN.style.display = 'none';
+            errorModalIN.style.display = 'none';
+        }
+
         // Close the modal when the user clicks anywhere outside of the modal
         window.onclick = function (event) {
             if (event.target == modal) {

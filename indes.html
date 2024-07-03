@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Validar Boleta</title>
+  <style>
+    /* Agrega tus estilos aquí */
+  </style>
+</head>
+<body>
+  <h1>Validar Boleta</h1>
+  <form id="validationForm">
+    <label for="cedula">Cédula:</label>
+    <input type="text" id="cedula" name="cedula" required>
+    <button type="button" onclick="validateAndMark()">Validar y Marcar como Entregada</button>
+  </form>
+  <div id="result"></div>
+
+  <script>
+    function validateAndMark() {
+      const cedula = document.getElementById('cedula').value;
+
+      fetch('https://script.google.com/macros/s/AKfycbzrRXAuBq5AMDxQWW0Q5J3etLUKIwHU0Jl11SfO38G_3CulY-GpO2k1DPDTJOqu3epzaA/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          action: 'validateAndMark',
+          cedula: cedula
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('result').innerText = data.message;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('result').innerText = 'Ocurrió un error al validar.';
+      });
+    }
+  </script>
+</body>
+</html>

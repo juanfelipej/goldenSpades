@@ -125,3 +125,19 @@ img{
     margin: 15px;
     width: 70%;
 }
+iframe {
+    width: 13rem;
+    height: 13rem;
+    border-radius: 15px;
+}
+.mapsIframe{
+    border: 0;
+margin: 15px;
+width: 17rem;
+height: 17rem;
+border-radius: 15px;
+
+    width: 14rem;
+    height: 14rem;
+    border-radius: 15px;
+}
