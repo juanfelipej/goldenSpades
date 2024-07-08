@@ -1,0 +1,74 @@
+/* Estilos para smartphones en modo vertical */
+@media only screen and (max-width: 375px) {
+    body > main > img:nth-child(4){
+        margin: 5px;
+        width: 65%;  
+    }
+    #logoWonder{
+        margin: 0;
+    }
+    body > main > img.logoGolden{
+        margin: 0;
+    }
+    #logoMP {
+        width: 160px;
+        margin: 7px;
+    }
+
+    h1 {
+        font-size: 38px;
+    }
+
+    h2 {
+        font-size: 13px;
+    }
+
+    .img_dinero {
+
+        width: 195px;
+
+    }
+
+    p {
+        font-size: 14px;
+    }
+
+    .form-control-custom {
+        height: 6px;
+    }
+
+ button {
+        margin: 0px;
+    }
+
+    #tyc {
+        font-size: 11px;
+    }
+
+   
+
+
+    .logoColjuegos {
+        margin: 12px;
+    }
+
+    .logoColjuegos>img {
+        width: 76px;
+    }
+    .logoGolden {
+        width: 38px;
+    }
+    iframe {
+        width: 13rem;
+        height: 13rem;
+        border-radius: 15px;
+    }
+}
+
+/* Estilos para smartphones en modo horizontal */
+@media only screen and (min-width: 481px) and (max-width: 767px) {
+    /* Tus estilos aquÃ­ */
+}
+
+/* Estilos para smartphones en modo horizontal o vertical */
+@media only screen and (min-width: 767px) {}

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inicio de sesión</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .login-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 300px;
+      text-align: center;
+    }
+
+    .login-container h1 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .login-container input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .login-container button {
+      width: calc(100% - 20px);
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background-color: #45a049;
+    }
+
+    .login-container #message {
+      margin-top: 10px;
+      color: #ff6347;
+    }
+    body {
+    background-image: url('recursos/jpg/fondoMovil.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-position: center center;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+}
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <h1>Inicio de sesión</h1>
+    <form id="loginForm" onsubmit="return login();">
+      <input type="text" id="username" name="username" placeholder="Nombre de usuario" required>
+      <br>
+      <input type="password" id="password" name="password" placeholder="Contraseña" required>
+      <br>
+      <button type="submit">Iniciar sesión</button>
+    </form>
+    <div id="message"></div>
+  </div>
+
+  <script>
+    function login() {
+      var username = document.getElementById('username').value;
+      var password = document.getElementById('password').value;
+
+      // URL de la API proporcionada
+      var appHost = "https://script.google.com/macros/s/AKfycbzE7PpTCt-_g_MtRJYqD-J3Hb1KUhwOrntlHEmnNh0c9QErerkCkUsCdb_tNWhEkqIAMA/exec";
+
+      // Enviar los datos de inicio de sesión al script
+      fetch(appHost + '/doLogin', {
+        method: 'POST',
+        mode: 'no-cors',  // Usar modo no-cors
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+        .then(() => {
+          document.getElementById('message').innerHTML = '¡Inicio de sesión exitoso!'; // Solo indica que la solicitud se envió correctamente
+          window.location.href = 'https://promo.marcopolocolombia.com/login/validador.html'; 
+        })
+        .catch(() => {
+          document.getElementById('message').innerHTML = 'Error al iniciar sesión.'; // Captura de errores
+        });
+
+
+      return false; // Evitar que el formulario se envíe de forma predeterminada
+    }
+  </script>
+</body>
+
+</html>

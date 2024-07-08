@@ -69,7 +69,7 @@
 			border: 1px solid #000;
 			border-collapse: separate;
 			border-spacing: 5px;
-			
+
 		}
 
 		.tabla-container {
@@ -145,7 +145,22 @@
 			justify-content: center;
 			align-items: center;
 		}
+
 		#showPopdown {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.5);
+			justify-content: center;
+			align-items: center;
+		}
+
+		#showPopError {
 			display: none;
 			position: fixed;
 			z-index: 1;
@@ -178,10 +193,18 @@
 			font-weight: bold;
 			cursor: pointer;
 		}
-		td>img{
+
+		td>img {
 			width: 8vw;
 		}
-		#popup-text, #popdown-text{
+
+		#popup-text,
+		#popdown-text {
+			color: black;
+			font-weight: bolder;
+		}
+
+		#popdownTextError {
 			color: black;
 			font-weight: bolder;
 		}
@@ -191,14 +214,14 @@
 <body>
 
 	<div id="overlay" style="display: none;"></div>
-    <div id="loading-indicator" style="display: none;">
-        <div class="spinner"></div>
-    </div>
+	<div id="loading-indicator" style="display: none;">
+		<div class="spinner"></div>
+	</div>
 	<main class="flex-column">
 		<form id="consultaForm" name="contact-form" class="flex-column"
 			action="https://script.google.com/macros/s/AKfycbxjW3GgXf0C0YkP6lxU52C3S7xZez7kgd3DA7qE0cnsKd2NrorXJmDhmjUP6tXsNUOFGg/exec"
 			method="POST" onsubmit="return consultaDatos()">
-			<h2>Ingrese la cédula del cliente especial:</h2>
+			<h2>Ingrese número de cédula:</h2>
 			<div class="input-container">
 				<input id="cedula" class="form-control-custom" type="number" name="cedula" placeholder="Cédula"
 					required>
@@ -225,22 +248,30 @@
 			<span class="close" onclick="hidePopup()">&times;</span>
 			<p id="popup-text"></p>
 			<button onclick="validateAndMark()">Reclamar</button>
-			
+
 		</div>
 	</div>
-	
+
 	<div id="showPopdown" class="popupdown">
 		<div class="popup-content">
-			
+
 			<p id="popdown-text"></p>
 			<button onclick="location.reload();">Salir</button>
-			
+
+		</div>
+	</div>
+	<div id="showPopError" class="popup">
+		<div class="popup-content">
+
+			<p id="popdownTextError">Lo sentimos, la cédula no está asociada a ningún registro.</p>
+			<button onclick="location.reload();">Salir</button>
+
 		</div>
 	</div>
 	<script>
 		function consultaDatos() {
 			const overlay = document.getElementById('overlay');
-const loadingIndicator = document.getElementById('loading-indicator');
+			const loadingIndicator = document.getElementById('loading-indicator');
 			var form = document.getElementById("consultaForm");
 			var cedula = form.elements["cedula"].value;
 
@@ -249,11 +280,25 @@ const loadingIndicator = document.getElementById('loading-indicator');
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			overlay.style.display = 'block';
 			loadingIndicator.style.display = 'block';
+
+
 			xhr.onload = function () {
 				if (xhr.status === 200) {
 					var datos = JSON.parse(xhr.responseText);
-					console.log("Datos recibidos:", datos); // Debugging line
-					if (datos.nombre !== undefined) {
+
+					if (datos.error) {
+						// Mostrar popup de error
+						showPopError.style.display = 'flex';
+					} else {
+						// Datos recibidos correctamente
+						var datoLocalStorage = {
+							nombre: datos.nombre,
+							cedula: datos.cedula,
+							celular: datos.celular
+						};
+						localStorage.setItem('user', JSON.stringify(datoLocalStorage));
+
+						console.log("Datos recibidos:", datos); // Debugging line
 						var tablaHTML = "<table><tr><th>Nombre</th><th>Cédula</th><th>Celular</th><th>Código</th><th>Entregado</th></tr>";
 
 						tablaHTML += "<tr><td>" + datos.nombre + "</td><td>" + datos.cedula + "</td><td>" + datos.celular + "</td><td>" + datos.codigo + "</td><td>";
@@ -269,16 +314,13 @@ const loadingIndicator = document.getElementById('loading-indicator');
 
 						document.getElementById("resultado").innerHTML = tablaHTML;
 						document.getElementById("actualizarEntregadoForm").style.display = "block";
-						overlay.style.display = 'none';
-      loadingIndicator.style.display = 'none';
-					} else {
-						document.getElementById("resultado").innerText = "Lo siento, no se encontraron datos para esta cédula.";
-						document.getElementById("actualizarEntregadoForm").style.display = "none"; // Ocultar formulario de actualización si no hay datos
 					}
 				} else {
 					console.error("Error al realizar la consulta. Código de estado HTTP: " + xhr.status);
 				}
-				
+
+				overlay.style.display = 'none';
+				loadingIndicator.style.display = 'none';
 			};
 
 			xhr.onerror = function () {
@@ -290,7 +332,7 @@ const loadingIndicator = document.getElementById('loading-indicator');
 		}
 
 		function actualizarEntregado() {
-			
+
 			var form = document.getElementById("actualizarEntregadoForm");
 			var entregado = document.getElementById("entregado").checked;
 
@@ -315,171 +357,71 @@ const loadingIndicator = document.getElementById('loading-indicator');
 			return false; // Para evitar el envío del formulario por defecto
 		}
 	</script>
-<script>
-    function validateAndMark() {
-		const overlay = document.getElementById('overlay');
-		const loadingIndicator = document.getElementById('loading-indicator');
-        const cedula = document.getElementById('cedula').value;
-		overlay.style.display = 'block';
-		loadingIndicator.style.display = 'block';
-        fetch('https://script.google.com/macros/s/AKfycbzrRXAuBq5AMDxQWW0Q5J3etLUKIwHU0Jl11SfO38G_3CulY-GpO2k1DPDTJOqu3epzaA/exec', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({
-                action: 'validateAndMark',
-                cedula: cedula
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-          
-			overlay.style.display = 'none';
-			loadingIndicator.style.display = 'none';
-            // Esperar un breve momento antes de recargar la página
-            setTimeout(() => {
-                location.reload();
-            }, 10); // Recarga después de 1 segundo (ajustable según necesidad)
-        })
-        .catch(error => {
-            console.error('Error:', error);1
-           
-        });
-		// Construct the new URL with the extracted data
-        const newURL = `https://aladdata-dev.ddev.site/registro/cliente?idnum=${idnum}&name=${name}&phone=${phone}`;
+	<script>
+		function validateAndMark() {
+			const overlay = document.getElementById('overlay');
+			const loadingIndicator = document.getElementById('loading-indicator');
+			const cedula = document.getElementById('cedula').value;
 
-        // Send data to the new URL
-        fetch(newURL, {
-            method: 'GET'
-        })
-        .then(() => {
-            // Wait a brief moment before reloading the page
-            setTimeout(() => {
-                location.reload();
-            }, 10); // Reload after 10 milliseconds (adjustable as needed)
-        })
-        .catch(error => {
-            console.error('Error sending data to new URL:', error);
-        });
-    }
-</script>
+			// Mostrar overlay y loadingIndicator
+			overlay.style.display = 'block';
+			loadingIndicator.style.display = 'block';
 
-	
+			// Realizar la solicitud fetch
+			fetch('https://script.google.com/macros/s/AKfycbzrRXAuBq5AMDxQWW0Q5J3etLUKIwHU0Jl11SfO38G_3CulY-GpO2k1DPDTJOqu3epzaA/exec', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: new URLSearchParams({
+					action: 'validateAndMark',
+					cedula: cedula
+				})
+			})
+				.then(response => response.json())
+				.then(data => {
+					// Ocultar overlay y loadingIndicator cuando la solicitud fetch se complete
+					overlay.style.display = 'none';
+					loadingIndicator.style.display = 'none';
+
+					// Recuperar datos del localStorage
+					var datoLocalStorageRecuperadoJSON = localStorage.getItem('user');
+					var datoLocalStorageRecuperado = JSON.parse(datoLocalStorageRecuperadoJSON);
+
+					// Extraer datos del objeto recuperado
+					var nombre = datoLocalStorageRecuperado.nombre;
+					var celular = datoLocalStorageRecuperado.celular;
+					var cedula = datoLocalStorageRecuperado.cedula;
+
+					// Construir la URL con los datos recuperados y los datos de la solicitud fetch
+					const url = `https://dev.aladdata.com/registro/cliente?idnum=${cedula}&name=${nombre}&phone=${celular}`;
+					
+					function abrirEnNuevaPagina(url) {
+						window.open(url, '_blank'); // Abre en una nueva pestaña o ventana
+					}
+
+					// Llamar a la función para abrir la URL en una nueva página
+					abrirEnNuevaPagina(url);
+
+					// Recargar la página actual después de 1 segundo
+					setTimeout(() => {
+						location.reload(); // Recargar la página actual
+					}, 1000);
+				})
+				.catch(error => {
+					// Manejar errores de la solicitud fetch
+					console.error('Error:', error);
+					overlay.style.display = 'none';
+					loadingIndicator.style.display = 'none';
+					// Puedes agregar aquí manejo de errores específico si es necesario
+				});
+		}
+	</script>
+
+
+
 
 	<script src="javascript/bono.js"></script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
+	<!-- Code injected by live-server -->
+
 </body>
 
 </html>

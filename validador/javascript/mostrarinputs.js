@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-
-    
     const form = document.forms['contact-form'];
     const inputs = form.querySelectorAll('.form-control-custom');
 

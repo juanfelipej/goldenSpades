@@ -29,7 +29,7 @@ function showPopup(datos) {
   
   function confirmClaim() {
     // Aquí puedes agregar la lógica para confirmar la reclamación de la boleta
-    alert('¡Boleta reclamada exitosamente!');
+    alert('Boleta reclamada exitosamente!');
     hidePopup();
   }
   
